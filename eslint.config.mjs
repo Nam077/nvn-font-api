@@ -31,7 +31,14 @@ export default [
                 sourceType: 'module',
             },
             globals: {
-                ...globals.node
+                ...globals.node,
+                ...globals.browser,
+                module: 'readonly',
+                require: 'readonly',
+                process: 'readonly',
+                __dirname: 'readonly',
+                __filename: 'readonly',
+                
             },
         },
         plugins: {
