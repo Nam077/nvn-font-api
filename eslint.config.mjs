@@ -16,7 +16,7 @@ export default [
     // Base ESLint configurations
     eslint.configs.recommended,
     {
-        ignores: ['dist/**', 'node_modules/**', 'eslint.config.*'],
+        ignores: ['dist/**', 'node_modules/**', 'eslint.config.*','src/modules/i18n/i18n.generated.ts'],
     },
 
     // TypeScript configurations
