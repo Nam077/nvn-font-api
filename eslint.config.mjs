@@ -11,12 +11,12 @@ import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import jsdocPlugin from 'eslint-plugin-jsdoc';
 import lodashPlugin from 'eslint-plugin-lodash';
 import promisePlugin from 'eslint-plugin-promise';
-import sortClassMembers from "eslint-plugin-sort-class-members";
+import sortClassMembers from 'eslint-plugin-sort-class-members';
+
 export default [
-    // Base ESLint configurations
     eslint.configs.recommended,
     {
-        ignores: ['dist/**', 'node_modules/**', 'eslint.config.*'],
+        ignores: ['dist/**', 'node_modules/**', 'eslint.config.*', 'src/modules/i18n/i18n.generated.ts'],
     },
 
     // TypeScript configurations
@@ -31,7 +31,13 @@ export default [
                 sourceType: 'module',
             },
             globals: {
-                ...globals.node
+                ...globals.node,
+                ...globals.browser,
+                module: 'readonly',
+                require: 'readonly',
+                process: 'readonly',
+                __dirname: 'readonly',
+                __filename: 'readonly',
             },
         },
         plugins: {
@@ -80,7 +86,7 @@ export default [
                 // 4. Enum Members: PascalCase
                 {
                     selector: 'enumMember',
-                    format: ['PascalCase'],
+                    format: ['PascalCase', 'UPPER_CASE'],
                 },
                 // 5. Classes: PascalCase
                 {
@@ -147,12 +153,11 @@ export default [
                         match: true,
                     },
                 },
-                // 14. Type Parameters: Single uppercase letter
                 {
                     selector: 'typeParameter',
                     format: ['PascalCase'],
                     custom: {
-                        regex: '^[A-Z]$',
+                        regex: '^[A-Z][A-Za-z0-9]*$',
                         match: true,
                     },
                 },
@@ -199,20 +204,20 @@ export default [
             // Prettier Integration
             'prettier/prettier': 'error',
             //
-            "sort-class-members/sort-class-members": [
+            'sort-class-members/sort-class-members': [
                 2,
                 {
-                    "order": [
-                        "[static-properties]",
-                        "[static-methods]",
-                        "[properties]",
-                        "[conventional-private-properties]",
-                        "constructor",
-                        "[methods]",
-                        "[conventional-private-methods]"
+                    order: [
+                        '[static-properties]',
+                        '[static-methods]',
+                        '[properties]',
+                        '[conventional-private-properties]',
+                        'constructor',
+                        '[methods]',
+                        '[conventional-private-methods]',
                     ],
-                    "accessorPairPositioning": "getThenSet"
-                }
+                    accessorPairPositioning: 'getThenSet',
+                },
             ],
             // Import Rules
             'import/order': [
@@ -269,58 +274,66 @@ export default [
             'lodash/prefer-is-nil': 'warn',
 
             // JSDoc Plugin Rules
-            'jsdoc/check-alignment': 'warn',
-            'jsdoc/check-param-names': 'error',
-            'jsdoc/check-property-names': 'error',
-            'jsdoc/check-tag-names': 'warn',
-            'jsdoc/check-types': 'warn',
-            'jsdoc/check-values': 'warn',
+            'jsdoc/check-access': 'warn', // Recommended
+            'jsdoc/check-alignment': 'warn', // Recommended
+            'jsdoc/check-param-names': 'warn', // Recommended
+            'jsdoc/check-property-names': 'warn', // Recommended
+            'jsdoc/check-tag-names': 'warn', // Recommended
+            'jsdoc/check-types': 'warn', // Recommended
+            'jsdoc/check-values': 'warn', // Recommended
+            'jsdoc/empty-tags': 'warn', // Recommended
+            'jsdoc/implements-on-classes': 'warn', // Recommended
+            'jsdoc/multiline-blocks': 'warn', // Recommended
+            'jsdoc/no-multi-asterisks': 'warn', // Recommended
+            'jsdoc/no-undefined-types': 'warn', // Recommended
+            'jsdoc/require-jsdoc': 'warn', // Recommended
+            'jsdoc/require-param': 'warn', // Recommended
+            'jsdoc/require-param-description': 'warn', // Recommended
+            'jsdoc/require-param-name': 'warn', // Recommended
+            'jsdoc/require-param-type': 'warn', // Enforce types in @param
+            'jsdoc/require-property': 'warn', // Recommended
+            'jsdoc/require-property-description': 'warn', // Recommended
+            'jsdoc/require-property-name': 'warn', // Recommended
+            'jsdoc/require-property-type': 'warn', // Enforce types in @property
+            'jsdoc/require-returns': 'warn', // Recommended
+            'jsdoc/require-returns-check': 'warn', // Recommended
+            'jsdoc/require-returns-description': 'warn', // Recommended
+            'jsdoc/require-returns-type': 'warn', // Enforce types in @returns
+            'jsdoc/require-yields': 'warn', // Recommended
+            'jsdoc/require-yields-check': 'warn', // Recommended
+            'jsdoc/tag-lines': [
+                'error',
+                'any',
+                {
+                    startLines: 1,
+                },
+            ],
+            'jsdoc/valid-types': 'warn', // Recommended
+
+            // Additional rules adjusted for TypeScript
+            'jsdoc/check-examples': 'off', // Disable if not using @example tags
+            'jsdoc/check-indentation': 'warn',
+            'jsdoc/check-line-alignment':  1,
+            'jsdoc/check-template-names': 'warn',
+            'jsdoc/check-syntax': 'warn',
+            'jsdoc/informative-docs': 'off',
+            'jsdoc/match-description': 'off',
+            'jsdoc/no-bad-blocks': 'warn',
+            'jsdoc/no-blank-block-descriptions': 'warn',
+            'jsdoc/no-defaults': 'warn',
+            'jsdoc/no-missing-syntax': 'off',
+            'jsdoc/no-restricted-syntax': 'off',
+            'jsdoc/no-types': 'off', // Ensure types are allowed
+            'jsdoc/require-asterisk-prefix': 'warn',
             'jsdoc/require-description': 'warn',
             'jsdoc/require-description-complete-sentence': 'warn',
-            'jsdoc/require-jsdoc': [
-                'warn',
-                {
-                    require: {
-                        FunctionDeclaration: true,
-                        MethodDefinition: true,
-                        ClassDeclaration: true,
-                        ArrowFunctionExpression: false,
-                        FunctionExpression: false,
-                    },
-                },
-            ],
-            'jsdoc/no-undefined-types': 'warn',
-            'jsdoc/multiline-blocks': ['warn', { noSingleLineBlocks: true }],
-            'jsdoc/valid-types': 'error',
-            'jsdoc/no-multi-asterisks': 'warn',
-            'jsdoc/require-param': 'warn',
-            'jsdoc/require-param-name': 'error',
-            'jsdoc/require-param-description': 'warn',
-            'jsdoc/require-returns': 'warn',
-            'jsdoc/require-returns-check': 'error',
-            'jsdoc/require-returns-description': 'warn',
+            'jsdoc/require-example': 'off',
+            'jsdoc/require-file-overview': 'off',
+            'jsdoc/require-hyphen-before-param-description': ['warn', 'always'],
+            'jsdoc/require-template': 'warn',
             'jsdoc/require-throws': 'warn',
-            'jsdoc/tag-lines': [
-                'warn',
-                'never',
-                {
-                    tags: {
-                        param: 'always',
-                        returns: 'always',
-                        throws: 'always',
-                    },
-                },
-            ],
-            'jsdoc/require-asterisk-prefix': 'error',
-            'jsdoc/check-indentation': ['warn', { excludeTags: ['example'] }],
-            'jsdoc/require-example': [
-                'warn',
-                {
-                    contexts: ['FunctionDeclaration', 'MethodDefinition'],
-                },
-            ],
-            'jsdoc/check-line-alignment': ['warn', 'always'],
-
+            'jsdoc/sort-tags': 'off',
+            "jsdoc/text-escaping": ["error", { "escapeMarkdown": true }],
             // Promise Plugin Rules
             'promise/always-return': 'error',
             'promise/no-return-wrap': 'error',
