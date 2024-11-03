@@ -3,6 +3,7 @@ import * as os from 'os';
 import { VersioningType, type INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -14,9 +15,10 @@ import type { AppConfig } from '@/config';
 
 /**
  * Initialize the application.
- * @param   {INestApplication} app - The application instance.
- * @returns {void}
- * @example `initApp(app)`
+ *
+ * @param {INestApplication} app - The application instance.
+ * @returns {void} - The return type.
+ * @example \`initApp(app)`
  */
 const initApp = (app: INestApplication): void => {
     app.useGlobalPipes(new I18nValidationPipe());
@@ -27,6 +29,19 @@ const initApp = (app: INestApplication): void => {
         type: VersioningType.URI,
     });
     app.enableCors();
+};
+
+const buildSwagger = (app: INestApplication): void => {
+    const options = new DocumentBuilder()
+        .setTitle('API')
+        .setDescription('API Documentation')
+        .setVersion('1.0')
+        .addTag('API')
+        .build();
+
+    const document = SwaggerModule.createDocument(app, options);
+
+    SwaggerModule.setup('api', app, document);
 };
 
 const getLocalIpAddress = (): string => {
@@ -40,8 +55,9 @@ const getLocalIpAddress = (): string => {
 
 /**
  * Bootstrap the application.
- * @returns {Promise<void>}
- * @example `bootstrap()`
+ *
+ * @returns {Promise<void>} - The return type.
+ * @example  \`bootstrap()`
  */
 async function bootstrap(): Promise<void> {
     const app: INestApplication = await NestFactory.create(AppModule);
@@ -50,6 +66,7 @@ async function bootstrap(): Promise<void> {
 
     // init libraries
     initApp(app);
+    buildSwagger(app);
     //
     await app.listen(PORT, '0.0.0.0');
     console.info(

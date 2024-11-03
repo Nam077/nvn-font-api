@@ -1,1 +1,1 @@
-// Export all modules from this directory
+export * from './app.constant';

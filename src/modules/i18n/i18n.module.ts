@@ -21,8 +21,9 @@ import { AppConfig } from '@/config';
         I18nModule.forRootAsync({
             /**
              * The function to provide the configuration.
-             * @param   {ConfigService}                        configService - The configuration service.
-             * @returns {Promise<I18nOptionsWithoutResolvers>}               The configuration.
+             *
+             * @param {ConfigService} configService - The configuration service.
+             * @returns {Promise<I18nOptionsWithoutResolvers>} The configuration.
              */
             useFactory: (configService: ConfigService<AppConfig>): I18nOptionsWithoutResolvers => ({
                 fallbackLanguage: configService.get('APP_FALLBACK_LANGUAGE') ?? 'en',

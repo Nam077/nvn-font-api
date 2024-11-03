@@ -91,6 +91,9 @@ importers:
       typeorm:
         specifier: ^0.3.20
         version: 0.3.20(ioredis@5.4.1)(pg@8.13.1)(ts-node@10.9.2(@types/node@22.8.4)(typescript@5.6.3))
+      validator:
+        specifier: ^13.12.0
+        version: 13.12.0
     devDependencies:
       "@commitlint/cli":
         specifier: ^19.5.0
@@ -137,6 +140,9 @@ importers:
       "@types/supertest":
         specifier: ^6.0.2
         version: 6.0.2
+      "@types/validator":
+        specifier: ^13.12.2
+        version: 13.12.2
       "@typescript-eslint/eslint-plugin":
         specifier: ^8.0.0
         version: 8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@1.21.6))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.6))(typescript@5.6.3)
@@ -13566,6 +13572,7 @@ snapshots:
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
       typeorm: 0.3.20(ioredis@5.4.1)(pg@8.13.1)(ts-node@10.9.2(@types/node@22.8.4)(typescript@5.6.3))
+      validator: 13.12.0
     transitivePeerDependencies:
       - "@fastify/static"
       - "@google-cloud/spanner"
